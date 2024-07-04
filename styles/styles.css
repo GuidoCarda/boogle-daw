@@ -1,0 +1,35 @@
+.board {
+  border: 4px solid black;
+  width: max-content;
+  margin-top: 2rem;
+  margin-inline: auto;
+}
+
+.board-row {
+  display: flex;
+}
+
+.board-cell {
+  aspect-ratio: 1/1;
+  width: 10rem;
+  border: 4px solid black;
+  transition: 200ms all ease-in-out;
+
+  font-size: 2rem;
+}
+
+.board-cell:active {
+  transform: scale(0.99);
+}
+
+.board-cell.selected {
+  border-color: rgb(50, 168, 64);
+  color: green;
+  font-weight: bold;
+}
+
+.board-cell:hover:not(.selected) {
+  font-size: 2.5rem;
+  border-color: rgb(136, 192, 137);
+  background: rgb(240, 247, 240);
+}
