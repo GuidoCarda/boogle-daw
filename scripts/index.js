@@ -1,7 +1,23 @@
-"use strict";
+var $playerForm = $(".player-form");
+var $intro = $(".intro");
+var $game = $(".game");
 
+function handlePlayerSubmit(e) {
+  e.preventDefault();
+  var input = e.target.elements[0];
+  var currentPlayer = input.value.trim();
 
+  if (currentPlayer.length < 3) {
+    return alert("El nombre debe tener minimo 3 caracteres");
+  }
+
+  $intro.classList.add("hidden");
+  $game.classList.add("visible");
+
+  console.log("El nombre es valido " + currentPlayer);
 }
+
+$playerForm.addEventListener("submit", handlePlayerSubmit);
 
 var $timer = $(".timer");
 var timer_options = [60, 120, 180];
