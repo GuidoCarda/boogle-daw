@@ -94,6 +94,13 @@ main > section {
   font-weight: bold;
 }
 
+.board-cell.valid-cell {
+  border-color: rgb(50, 168, 64);
+  color: green;
+  background: rgba(46, 158, 59, 0.309);
+  font-weight: bold;
+}
+
 .board-cell:hover:not(.selected) {
   font-size: 2.5rem;
   border-color: rgb(136, 192, 137);
