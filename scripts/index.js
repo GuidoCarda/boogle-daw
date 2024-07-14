@@ -1,6 +1,8 @@
 var $playerForm = $(".player-form");
 var $intro = $(".intro");
 var $game = $(".game");
+var $wordsList = $(".words-list");
+var $currentWord = $(".current-word");
 
 function handlePlayerSubmit(e) {
   e.preventDefault();
@@ -17,7 +19,26 @@ function handlePlayerSubmit(e) {
   console.log("El nombre es valido " + currentPlayer);
 }
 
+function displayNewWord(word) {
+  var $word = document.createElement("li");
+  $word.textContent = word;
+
+  $wordsList.append($word);
+}
 $playerForm.addEventListener("submit", handlePlayerSubmit);
+$cells.forEach(function ($cell) {
+  $cell.addEventListener("click", function (e) {
+    if (e.target.classList.contains("selected")) {
+      $currentWord.textContent = $currentWord.textContent.slice(
+        0,
+        $currentWord.textContent.length - 1
+      );
+    } else {
+      $currentWord.textContent += e.target.textContent;
+    }
+    e.target.classList.toggle("selected");
+  });
+});
 
 var $timer = $(".timer");
 var timer_options = [60, 120, 180];
