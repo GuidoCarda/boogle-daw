@@ -6,6 +6,23 @@ var $board = $(".board");
 var $cells = $$(".board-cell");
 var $currentWord = $(".current-word");
 
+var board = [
+  ["a", "b", "a", "a"],
+  ["a", "a", "d", "a"],
+  ["a", "a", "d", "a"],
+  ["z", "z", "z", "z"],
+];
+
+function initBoard(board) {
+  $rows = $$(".board-row");
+  $rows.forEach(function ($row, rowIndex) {
+    for (let index = 0; index < $row.children.length; index++) {
+      $row.children[index].textContent = board[rowIndex][index];
+    }
+  });
+}
+
+initBoard(board);
 function handlePlayerSubmit(e) {
   e.preventDefault();
   var input = e.target.elements[0];
