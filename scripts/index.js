@@ -5,14 +5,19 @@ var $wordsList = $(".words-list");
 var $board = $(".board");
 var $cells = $$(".board-cell");
 var $currentWord = $(".current-word");
+var $checkWord = $(".check-word");
+var $points = $(".points");
 
 var currentWord = {};
+var points = 0;
+
+var words = ["hola", "ola", "algo", "prueba"];
 
 var board = [
-  ["a", "b", "a", "a"],
-  ["a", "a", "d", "a"],
-  ["a", "a", "d", "a"],
-  ["z", "z", "z", "z"],
+  ["a", "b", "a", "o"],
+  ["h", "o", "l", "g"],
+  ["a", "a", "a", "b"],
+  ["p", "r", "u", "e"],
 ];
 
 function initBoard(board) {
@@ -109,13 +114,45 @@ function getValidMoves(rowIndex, cellIndex) {
   return validCells;
 }
 
+function clearBoard() {
+  $cells.forEach(function ($cell) {
+    $cell.classList.remove("selected");
+  });
+}
+
 $playerForm.addEventListener("submit", handlePlayerSubmit);
 $cells.forEach(function ($cell) {
   $cell.addEventListener("mouseover", handleMouseOver);
   $cell.addEventListener("mouseout", handleMouseOut);
 });
 
+function handleWordSubmit(e) {
+  console.log("handle word check logic");
+
+  var word = getObjectValues(currentWord).join("");
+
+  console.log(word);
+
+  if (!isValidWord(word)) {
+    return alert("Debe contener al menos 3 letras");
+  }
+
+  if (words.includes(word)) {
+    displayNewWord(word);
+    currentWord = {};
+    points += WORD_LENGTH_POINTS[word.length];
+    $points.textContent = points;
+  } else {
+    alert("No existe");
+  }
+  $currentWord.textContent = "";
+  clearBoard();
+}
+
+$checkWord.addEventListener("click", handleWordSubmit);
+
 function getLastLetterPos() {
+  // letterPositions = 'row-col'
   var lastLetterPos;
   for (var letterPos in currentWord) {
     if (currentWord.hasOwnProperty(letterPos)) {
@@ -124,8 +161,6 @@ function getLastLetterPos() {
   }
   return lastLetterPos;
 }
-
-// letterPositions = 'row-col'
 
 function handleCellClick(e) {
   var cell = e.target;
@@ -143,8 +178,6 @@ function handleCellClick(e) {
 
   if ($currentWord.textContent.length > 0) {
     lastLetterPos = getLastLetterPos();
-
-    console.log(lastLetterPos);
 
     var validMoves = getValidMoves(
       Number(lastLetterPos[0]),
