@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles/reset.css" />
     <link rel="stylesheet" href="/styles/styles.css" />
     <title>Document</title>
@@ -11,6 +17,7 @@
     <header>boogle</header>
     <main>
       <section class="intro">
+      <section class="intro hidden">
         <h1>Boogle</h1>
         <p>Ingresa un nombre y empeza a jugar!</p>
         <form class="player-form">
@@ -19,16 +26,22 @@
           <button>Jugar</button>
         </form>
       </section>
-      <section class="game">
-        <div>
-          Remaining time:
-          <span class="timer"></span>
-        </div>
+      <section class="game visible">
+        <header>
+          <div>
+            Remaining time:
+            <span class="timer"></span>
+          </div>
+          <div>
+            Puntos:
+            <span class="points">0</span>
+          </div>
+        </header>
         <div class="board">
           <div class="board-row">
             <button class="board-cell">w</button>
             <button class="board-cell">k</button>
-            <button class="board-cell selected">p</button>
+            <button class="board-cell">p</button>
             <button class="board-cell">l</button>
           </div>
           <div class="board-row">
@@ -50,7 +63,10 @@
             <button class="board-cell">e</button>
           </div>
         </div>
-        <div class="current-word"></div>
+        <div class="word-container">
+          <span class="current-word"></span>
+          <button class="check-word">probar</button>
+        </div>
         <div class="words">
           <h2>Palabras encontradas:</h2>
           <ul class="words-list">
@@ -69,5 +85,6 @@
     </footer>
   </body>
   <script src="/scripts/lib.js"></script>
+  <script src="/scripts/constants.js"></script>
   <script src="/scripts/index.js"></script>
 </html>

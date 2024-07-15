@@ -1,3 +1,7 @@
+html {
+  font-family: "Press Start 2P", system-ui;
+}
+
 main,
 .intro {
   min-height: calc(100vh - 8rem);
@@ -89,22 +93,40 @@ main > section {
 }
 
 .board-cell.selected {
-  border-color: rgb(50, 168, 64);
-  color: green;
+  color: white;
+  background: rgb(31, 160, 31);
   font-weight: bold;
 }
 
 .board-cell.valid-cell {
-  border-color: rgb(50, 168, 64);
-  color: green;
-  background: rgba(46, 158, 59, 0.309);
+  background: rgb(185, 235, 191);
   font-weight: bold;
 }
 
 .board-cell:hover:not(.selected) {
   font-size: 2.5rem;
-  border-color: rgb(136, 192, 137);
-  background: rgb(240, 247, 240);
+  background: rgb(123, 211, 123);
+}
+
+.word-container {
+  margin-inline: auto;
+  display: flex;
+  margin-top: 1.5rem;
+  max-width: calc(6rem * 4);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.current-word {
+  font-size: 1.25rem;
+}
+
+.check-word {
+  border: none;
+  height: 3rem;
+  padding-inline: 2.5rem;
+  background: black;
+  color: white;
 }
 
 /* words list */
