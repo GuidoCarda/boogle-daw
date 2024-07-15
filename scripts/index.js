@@ -49,6 +49,10 @@ function setValidCell($cell) {
   $cell.classList.add("valid-cell");
 }
 
+function isValidWord(word) {
+  return word.length > 2;
+}
+
 function handleMouseOver(e) {
   var cell = e.target;
   var row = cell.parentElement;
