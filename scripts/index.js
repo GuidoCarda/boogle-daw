@@ -6,6 +6,8 @@ var $board = $(".board");
 var $cells = $$(".board-cell");
 var $currentWord = $(".current-word");
 
+var currentWord = {};
+
 var board = [
   ["a", "b", "a", "a"],
   ["a", "a", "d", "a"],
@@ -23,6 +25,7 @@ function initBoard(board) {
 }
 
 initBoard(board);
+
 function handlePlayerSubmit(e) {
   e.preventDefault();
   var input = e.target.elements[0];
@@ -62,10 +65,7 @@ function handleMouseOver(e) {
   var rowIndex = Array.prototype.indexOf.call(board.children, row);
 
   var validMoves = getValidMoves(rowIndex, cellIndex);
-
   validMoves.forEach(setValidCell);
-
-  console.log(validMoves);
 }
 
 function handleMouseOut() {
@@ -114,19 +114,81 @@ $cells.forEach(function ($cell) {
   $cell.addEventListener("mouseover", handleMouseOver);
   $cell.addEventListener("mouseout", handleMouseOut);
 });
-$cells.forEach(function ($cell) {
-  $cell.addEventListener("click", function (e) {
-    if (e.target.classList.contains("selected")) {
-      $currentWord.textContent = $currentWord.textContent.slice(
-        0,
-        $currentWord.textContent.length - 1
-      );
-    } else {
-      $currentWord.textContent += e.target.textContent;
+
+function getLastLetterPos() {
+  var lastLetterPos;
+  for (var letterPos in currentWord) {
+    if (currentWord.hasOwnProperty(letterPos)) {
+      lastLetterPos = letterPos;
     }
+  }
+  return lastLetterPos;
+}
+
+// letterPositions = 'row-col'
+
+function handleCellClick(e) {
+  var cell = e.target;
+  var row = cell.parentElement;
+  var board = row.parentElement;
+
+  var cellIndex = Array.prototype.indexOf.call(row.children, cell);
+  var rowIndex = Array.prototype.indexOf.call(board.children, row);
+
+  var selectedPos = rowIndex + "-" + cellIndex;
+  var selectedLetter = e.target.textContent;
+
+  var lastLetterPos;
+  var isValidPos;
+
+  if ($currentWord.textContent.length > 0) {
+    lastLetterPos = getLastLetterPos();
+
+    console.log(lastLetterPos);
+
+    var validMoves = getValidMoves(
+      Number(lastLetterPos[0]),
+      Number(lastLetterPos[2])
+    );
+
+    isValidPos = Array.prototype.indexOf.call(validMoves, cell);
+
+    if (isValidPos === -1 && lastLetterPos !== selectedPos) {
+      console.log("Invalid movement! 1");
+    }
+  }
+
+  if (e.target.classList.contains("selected")) {
+    if (lastLetterPos === selectedPos) {
+      delete currentWord[selectedPos];
+      e.target.classList.toggle("selected");
+    }
+    $currentWord.textContent = getObjectValues(currentWord).join("");
+  } else {
+    if (isValidPos === -1 && lastLetterPos !== selectedPos) {
+      console.log("Invalid movement! 2");
+
+      return;
+    }
+    currentWord[selectedPos] = selectedLetter;
+    $currentWord.textContent += selectedLetter;
     e.target.classList.toggle("selected");
-  });
+  }
+}
+
+$cells.forEach(function ($cell) {
+  $cell.addEventListener("click", handleCellClick);
 });
+
+function getObjectValues(obj) {
+  var values = [];
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      values.push(obj[key]);
+    }
+  }
+  return values;
+}
 
 var $timer = $(".timer");
 var timer_options = [60, 120, 180];
