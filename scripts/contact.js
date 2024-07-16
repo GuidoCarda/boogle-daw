@@ -1,10 +1,5 @@
 $contactForm = $(".contact-form");
-
-var validate = {
-  email: validateEmail,
-  name: validateName,
-  message: validateMessage,
-};
+$inputs = $$("input, textarea");
 
 function validateEmail(value) {
   var emailPattern =
@@ -19,42 +14,106 @@ function validateEmail(value) {
 }
 
 function validateName(value) {
-  if (!value.trim().lenght) {
+  if (!value.length) {
     return "Campo vacio";
+  }
+
+  if (value.length < 3) {
+    return "Debe contener al menos 3 caracteres";
   }
 
   return null;
 }
 
 function validateMessage(value) {
-  return value.lenght > 5;
+  if (value.length <= 5) {
+    return "Debe contener al menos 6 caracteres";
+  }
+
+  return null;
+}
+
+var validate = {
+  email: validateEmail,
+  name: validateName,
+  message: validateMessage,
+};
+
+function validateForm() {
+  var isValid = true;
+
+  $inputs.forEach(function ($input) {
+    var inputError = validate[$input.name]($input.value);
+    var $errorMsg = $input.nextElementSibling;
+
+    if (inputError) {
+      $input.classList.add("error");
+      $errorMsg.textContent = inputError;
+      isValid = false;
+    }
+  });
+
+  return isValid;
 }
 
 function getFormValues(elements) {
-  var formValues = [];
+  var formValues = {};
 
   for (var i = 0; i < elements.length; i++) {
     var element = elements[i];
     if (element.name) {
-      formValues.push({ name: element.name, value: element.value });
+      formValues[element.name] = element.value;
     }
   }
 
   return formValues;
 }
 
+function handleInputBlur(e) {
+  var $input = e.target;
+  var inputError = validate[$input.name]($input.value);
+  var $errorMsg = $input.nextElementSibling;
+
+  if (inputError) {
+    $input.classList.add("error");
+    $errorMsg.textContent = inputError;
+  }
+}
+
+function handleInputFocus(e) {
+  var $input = e.target;
+  var $errorMsg = $input.nextElementSibling;
+
+  if ($input.classList.contains("error")) {
+    $input.classList.remove("error");
+    $errorMsg.textContent = "";
+  }
+}
+
 function handleSubmit(e) {
   e.preventDefault();
   var elements = e.target.elements;
+  var isValid = validateForm();
+
+  if (!isValid) return;
+
   var formValues = getFormValues(elements);
 
-  formValues.forEach(function (input) {
-    var validationMessage = validate[input.name](input.value);
-  });
+  var mailtoLink =
+    "mailto:" +
+    encodeURIComponent("boogle@game.com") +
+    "?subject=" +
+    encodeURIComponent("Consulta boogle - " + formValues.name) +
+    "&body=" +
+    encodeURIComponent(formValues.message + " ");
 
-  if (true) return;
-
-  $contactForm.submit();
+  window.location.href = mailtoLink;
 }
 
+function attachInputListeners($input) {
+  $input.addEventListener("blur", handleInputBlur);
+  $input.addEventListener("focus", handleInputFocus);
+}
+
+$inputs.forEach(attachInputListeners);
 $contactForm.addEventListener("submit", handleSubmit);
