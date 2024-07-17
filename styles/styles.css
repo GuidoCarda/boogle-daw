@@ -3,7 +3,10 @@ html {
 }
 
 main,
-.intro {
+.intro,
+.end-game,
+.contact {
+  position: relative;
   min-height: calc(100vh - 8rem);
 }
 
@@ -143,6 +146,35 @@ main > section {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.alert {
+  height: 4rem;
+  width: max-content;
+  visibility: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+
+  opacity: 0;
+
+  background: white;
+  padding-inline: 2rem;
+  margin-inline: auto;
+  border: 3px solid black;
+  transition: all 200ms;
+}
+
+.alert.visible {
+  opacity: 100;
+
+  visibility: visible;
 }
 
 /* Contact Page */

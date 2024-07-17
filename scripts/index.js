@@ -37,7 +37,7 @@ function handlePlayerSubmit(e) {
   var currentPlayer = input.value.trim();
 
   if (currentPlayer.length < 3) {
-    return alert("El nombre debe tener minimo 3 caracteres");
+    return showAlert("El nombre debe tener minimo 3 caracteres");
   }
 
   $intro.classList.add("hidden");
@@ -143,7 +143,7 @@ function handleWordSubmit(e) {
     points += WORD_LENGTH_POINTS[word.length];
     $points.textContent = points;
   } else {
-    alert("No existe");
+    showAlert("No existe");
   }
   $currentWord.textContent = "";
   clearBoard();
@@ -244,3 +244,17 @@ function timer(time = 10) {
 }
 
 timer();
+$alert = $(".alert");
+
+function showAlert(message) {
+  if ($alert.classList.contains("visible")) {
+    $alert.classList.remove("visible");
+  }
+
+  $alert.textContent = message;
+  $alert.classList.add("visible");
+
+  setTimeout(function () {
+    $alert.classList.remove("visible");
+  }, 2000);
+}
