@@ -26,6 +26,17 @@ main > section {
   display: none;
 }
 
+.end-game {
+  display: none;
+}
+
+.end-game.visible {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .game {
   display: none;
 }
@@ -47,7 +58,6 @@ main > section {
   margin-top: 1rem;
   padding-inline: 2rem;
 
-  border-radius: 0.5rem;
   border: none;
 
   color: white;
@@ -58,8 +68,7 @@ main > section {
   height: 4rem;
   font-size: 1.25rem;
   width: 100%;
-  border-radius: 0.5rem;
-  border: 2px solid rgb(187, 187, 187);
+  border: 3px solid rgb(187, 187, 187);
   outline: none;
   padding: 1rem;
   font: inherit;
@@ -179,8 +188,7 @@ main > section {
 
 /* Contact Page */
 
-#contact-page {
-  min-height: 100vh;
+.contact {
   width: min(1080px, calc(100vw - 4rem));
   margin-inline: auto;
   display: flex;
@@ -189,13 +197,13 @@ main > section {
   justify-content: center;
 }
 
-#contact-page h1,
+.contact h1,
 .intro h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
-#contact-page p,
+.contact p,
 .intro p {
   font-size: 1.5rem;
   max-width: 40ch;
@@ -225,14 +233,13 @@ main > section {
 .contact-form :is(input, button) {
   height: 2.5rem;
   font: inherit;
-  border-radius: 0.3rem;
   outline: none;
   width: 100%;
 }
 
 .contact-form :is(input, textarea) {
   padding: 0.5rem;
-  border: 1px solid rgb(182, 182, 182);
+  border: 3px solid rgb(182, 182, 182);
 }
 
 .contact-form textarea {
@@ -249,7 +256,7 @@ main > section {
 }
 
 .contact-form .input-group :is(input.error, textarea.error) {
-  border: 1px solid red;
+  border-color: rgb(191, 54, 54);
 }
 
 .contact-form button {
@@ -267,8 +274,11 @@ main > section {
 
 .contact-form .error-msg {
   color: red;
+  margin-top: 0.5rem;
   display: block;
-  height: 1.5rem;
+  height: 2rem;
+  line-height: 1.5;
+  font-size: 0.875rem;
 }
 
 /*  header  & footer */

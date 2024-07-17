@@ -29,6 +29,7 @@ a {
 
 button {
   cursor: pointer;
+  font: inherit;
 }
 
 ul {

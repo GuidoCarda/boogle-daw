@@ -7,9 +7,11 @@ var $cells = $$(".board-cell");
 var $currentWord = $(".current-word");
 var $checkWord = $(".check-word");
 var $points = $(".points");
+var $endGame = $(".end-game");
 
 var currentWord = {};
 var points = 0;
+var guessedWords = [];
 
 var words = ["hola", "ola", "algo", "prueba"];
 
@@ -29,7 +31,10 @@ function initBoard(board) {
   });
 }
 
-initBoard(board);
+function newGame() {
+  timer();
+  initBoard(board);
+}
 
 function handlePlayerSubmit(e) {
   e.preventDefault();
@@ -43,7 +48,7 @@ function handlePlayerSubmit(e) {
   $intro.classList.add("hidden");
   $game.classList.add("visible");
 
-  console.log("El nombre es valido " + currentPlayer);
+  newGame();
 }
 
 function displayNewWord(word) {
@@ -131,21 +136,22 @@ function handleWordSubmit(e) {
 
   var word = getObjectValues(currentWord).join("");
 
-  console.log(word);
-
   if (!isValidWord(word)) {
-    return alert("Debe contener al menos 3 letras");
-  }
-
-  if (words.includes(word)) {
+    showAlert("Debe contener al menos 3 letras");
+  } else if (guessedWords.includes(word)) {
+    showAlert("Ya ingresaste " + word);
+  } else if (words.includes(word)) {
     displayNewWord(word);
-    currentWord = {};
+    guessedWords.push(word);
+
     points += WORD_LENGTH_POINTS[word.length];
     $points.textContent = points;
   } else {
     showAlert("No existe");
   }
+
   $currentWord.textContent = "";
+  currentWord = {};
   clearBoard();
 }
 
@@ -235,6 +241,8 @@ function timer(time = 10) {
       $timer.textContent = remainingTime;
 
       if (remainingTime <= 0) {
+        $game.classList.remove("visible");
+        $endGame.classList.add("visible");
         return clearInterval(intervalRef);
       }
 
@@ -243,7 +251,6 @@ function timer(time = 10) {
   }
 }
 
-timer();
 $alert = $(".alert");
 
 function showAlert(message) {
