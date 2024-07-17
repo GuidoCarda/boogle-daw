@@ -58,8 +58,8 @@ function initBoard() {
 }
 
 function newGame() {
-  timer();
-  initBoard(board);
+  timer(timer_options[2]);
+  initBoard();
 }
 
 function handlePlayerSubmit(e) {
@@ -151,29 +151,43 @@ function clearBoard() {
   });
 }
 
-$playerForm.addEventListener("submit", handlePlayerSubmit);
-$cells.forEach(function ($cell) {
-  $cell.addEventListener("mouseover", handleMouseOver);
-  $cell.addEventListener("mouseout", handleMouseOut);
-});
+function checkWord(word) {
+  return fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
+    .then(function (res) {
+      if (!res.ok) {
+        return false;
+      }
+      return res.json();
+    })
+    .then(function (data) {
+      if (!data || !data.length) {
+        return false;
+      }
+      return true;
+    })
+    .catch(function () {
+      return false;
+    });
+}
 
-function handleWordSubmit(e) {
-  console.log("handle word check logic");
-
+function handleWordSubmit() {
   var word = getObjectValues(currentWord).join("");
 
   if (!isValidWord(word)) {
     showAlert("Debe contener al menos 3 letras");
   } else if (guessedWords.includes(word)) {
     showAlert("Ya ingresaste " + word);
-  } else if (words.includes(word)) {
-    displayNewWord(word);
-    guessedWords.push(word);
-
-    points += WORD_LENGTH_POINTS[word.length];
-    $points.textContent = points;
   } else {
-    showAlert("No existe");
+    checkWord(word).then(function (isValid) {
+      if (isValid) {
+        displayNewWord(word);
+        guessedWords.push(word);
+        points += WORD_LENGTH_POINTS[word.length];
+        $points.textContent = points;
+      } else {
+        showAlert("Palabra invalida");
+      }
+    });
   }
 
   $currentWord.textContent = "";
@@ -182,6 +196,11 @@ function handleWordSubmit(e) {
 }
 
 $checkWord.addEventListener("click", handleWordSubmit);
+$playerForm.addEventListener("submit", handlePlayerSubmit);
+$cells.forEach(function ($cell) {
+  $cell.addEventListener("mouseover", handleMouseOver);
+  $cell.addEventListener("mouseout", handleMouseOut);
+});
 
 function getLastLetterPos() {
   // letterPositions = 'row-col'
