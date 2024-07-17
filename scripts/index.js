@@ -15,20 +15,46 @@ var guessedWords = [];
 
 var words = ["hola", "ola", "algo", "prueba"];
 
-var board = [
-  ["a", "b", "a", "o"],
-  ["h", "o", "l", "g"],
-  ["a", "a", "a", "b"],
-  ["p", "r", "u", "e"],
-];
+function getRandomLetter(str) {
+  return str.charAt(Math.floor(Math.random() * str.length));
+}
 
-function initBoard(board) {
-  $rows = $$(".board-row");
-  $rows.forEach(function ($row, rowIndex) {
-    for (let index = 0; index < $row.children.length; index++) {
-      $row.children[index].textContent = board[rowIndex][index];
-    }
+function initBoard() {
+  var $rows = $$(".board-row");
+  var vowels = "aeiou";
+  var consonants = "bcdfghjklmnpqrstvwxyz";
+  var board = [[], [], [], []];
+  var letters = [];
+
+  var totalCells = 16;
+  var vowelCount = Math.floor(totalCells * 0.4);
+  var consonantCount = totalCells - vowelCount;
+
+  for (var i = 0; i < vowelCount; i++) {
+    letters.push(getRandomLetter(vowels));
+  }
+
+  for (var i = 0; i < consonantCount; i++) {
+    letters.push(getRandomLetter(consonants));
+  }
+
+  letters.sort(function () {
+    return 0.5 - Math.random();
   });
+
+  for (var i = 0; i < board.length; i++) {
+    for (var j = 0; j < 4; j++) {
+      board[i][j] = letters.pop();
+    }
+  }
+
+  for (var i = 0; i < $rows.length; i++) {
+    var $row = $rows[i];
+    var $cells = $row.children;
+    for (var j = 0; j < $cells.length; j++) {
+      $cells[j].textContent = board[i][j];
+    }
+  }
 }
 
 function newGame() {
