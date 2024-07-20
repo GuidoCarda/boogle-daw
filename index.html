@@ -15,11 +15,13 @@
   </head>
   <body>
     <header>
-      <span>boogle</span>
-      <a href="contact.html">Contactanos</a>
+      <nav class="nav-bar container">
+        <a href="index.html">boogle</a>
+        <a href="contact.html">Contactanos</a>
+      </nav>
     </header>
     <main>
-      <section class="intro">
+      <section class="container intro">
         <h1>Boogle</h1>
         <p>Ingresa un nombre y empeza a jugar!</p>
         <form class="player-form">
@@ -28,10 +30,10 @@
           <button>Jugar</button>
         </form>
       </section>
-      <section class="game">
-        <header>
+      <section class="container game">
+        <header class="game-header">
           <div>
-            Remaining time:
+            Tiempo:
             <span class="timer"></span>
           </div>
           <div>
@@ -39,49 +41,47 @@
             <span class="points">0</span>
           </div>
         </header>
-        <div class="board">
-          <div class="board-row">
-            <button class="board-cell">w</button>
-            <button class="board-cell">k</button>
-            <button class="board-cell">p</button>
-            <button class="board-cell">l</button>
+        <div class="two-cols">
+          <div class="board">
+            <div class="board-row">
+              <button class="board-cell">w</button>
+              <button class="board-cell">k</button>
+              <button class="board-cell">p</button>
+              <button class="board-cell">l</button>
+            </div>
+            <div class="board-row">
+              <button class="board-cell">a</button>
+              <button class="board-cell">b</button>
+              <button class="board-cell">c</button>
+              <button class="board-cell">d</button>
+            </div>
+            <div class="board-row">
+              <button class="board-cell">e</button>
+              <button class="board-cell">f</button>
+              <button class="board-cell">g</button>
+              <button class="board-cell">h</button>
+            </div>
+            <div class="board-row">
+              <button class="board-cell">j</button>
+              <button class="board-cell">l</button>
+              <button class="board-cell">m</button>
+              <button class="board-cell">e</button>
+            </div>
           </div>
-          <div class="board-row">
-            <button class="board-cell">a</button>
-            <button class="board-cell">b</button>
-            <button class="board-cell">c</button>
-            <button class="board-cell">d</button>
+          <div class="word-container">
+            <span class="current-word"></span>
+            <button class="check-word">probar</button>
           </div>
-          <div class="board-row">
-            <button class="board-cell">e</button>
-            <button class="board-cell">f</button>
-            <button class="board-cell">g</button>
-            <button class="board-cell">h</button>
-          </div>
-          <div class="board-row">
-            <button class="board-cell">j</button>
-            <button class="board-cell">l</button>
-            <button class="board-cell">m</button>
-            <button class="board-cell">e</button>
-          </div>
-        </div>
-        <div class="word-container">
-          <span class="current-word"></span>
-          <button class="check-word">probar</button>
         </div>
         <div class="words">
           <h2>Palabras encontradas:</h2>
-          <ul class="words-list">
-            <!-- <li>dia</li>
-            <li>pero</li>
-            <li>alto</li>
-            <li>calidad</li> -->
-          </ul>
+          <ul class="words-list"></ul>
         </div>
       </section>
 
-      <section class="end-game">
+      <section class="container end-game">
         <h1>El juego finalizo!</h1>
+        <button class="restart">Jugar denuevo</button>
       </section>
 
       <div class="alert"></div>
