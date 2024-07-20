@@ -372,3 +372,68 @@ footer {
     width: 100%;
   }
 }
+
+.ranking {
+  position: absolute;
+  inset: 0;
+  width: min(40rem, 98%);
+  margin: auto;
+  padding: 3rem 2rem;
+}
+
+.ranking::backdrop {
+  background: rgba(0, 0, 0, 0.323);
+  backdrop-filter: blur(2px);
+}
+
+.ranking header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.ranking header button {
+  height: 2.5rem;
+  width: 2.5rem;
+  background: black;
+  border: none;
+  color: white;
+}
+
+.ranking .order-by {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ranking .order-by label {
+  font-size: 0.8rem;
+  display: block;
+}
+
+.ranking .order-by select {
+  height: 2.5rem;
+  padding-inline: 2rem;
+  font: inherit;
+  font-size: 0.8rem;
+  border: 3px solid black;
+  outline: none;
+}
+
+.ranking h2 {
+  font-size: 1.125;
+}
+
+.ranking .players {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 3rem;
+}
+
+.ranking .players li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

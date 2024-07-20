@@ -8,6 +8,7 @@ var $currentWord = $(".current-word");
 var $checkWord = $(".check-word");
 var $points = $(".points");
 var $endGame = $(".end-game");
+var $ranking = $(".ranking");
 
 var currentWord = {};
 var points = 0;
@@ -15,6 +16,7 @@ var guessedWords = [];
 
 var words = ["hola", "ola", "algo", "prueba"];
 
+$ranking.showModal();
 function getRandomLetter(str) {
   return str.charAt(Math.floor(Math.random() * str.length));
 }
