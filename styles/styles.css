@@ -22,6 +22,15 @@ main,
   justify-content: space-between;
 }
 
+.ranking-btn {
+  height: 3rem;
+  background: black;
+  padding-inline: 1rem;
+  color: white;
+  border: none;
+  margin-left: 1rem;
+}
+
 .intro {
   display: flex;
   flex-direction: column;
@@ -354,25 +363,6 @@ footer {
   padding-inline: 4rem;
 }
 
-@media screen and (max-width: 800px) {
-  .two-cols {
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .word-container {
-    padding-right: 0;
-  }
-
-  .word-container .current-word {
-    text-align: center;
-  }
-
-  .check-word {
-    width: 100%;
-  }
-}
-
 .ranking {
   position: absolute;
   inset: 0;
@@ -393,7 +383,7 @@ footer {
   margin-bottom: 3rem;
 }
 
-.ranking header button {
+.ranking header .close {
   height: 2.5rem;
   width: 2.5rem;
   background: black;
@@ -405,6 +395,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
 .ranking .order-by label {
@@ -429,11 +420,61 @@ footer {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  margin-top: 3rem;
+  max-height: 30rem;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
-.ranking .players li {
+.ranking .players li,
+.ranking .labels {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+
+.ranking .labels {
+  font-size: 0.7rem;
+  margin-bottom: 1rem;
+  color: gray;
+  padding-right: 1rem;
+}
+
+.ranking .players li .name,
+.ranking .labels .name {
+  /* background: red; */
+  width: 60%;
+}
+.ranking .players li .date,
+.ranking .labels .date {
+  width: 30%;
+  /* background: green; */
+  text-align: center;
+}
+.ranking .players li .score,
+.ranking .labels .score {
+  /* background: orange; */
+  width: 10%;
+  text-align: end;
+}
+
+@media screen and (max-width: 800px) {
+  .two-cols {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .word-container {
+    padding-right: 0;
+  }
+
+  .word-container .current-word {
+    text-align: center;
+  }
+
+  .check-word {
+    width: 100%;
+  }
+
+  .ranking .players {
+    font-size: 0.7rem;
+  }
 }

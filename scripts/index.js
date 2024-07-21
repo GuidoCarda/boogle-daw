@@ -3,22 +3,26 @@
 var $playerForm = $(".player-form");
 var $intro = $(".intro");
 var $game = $(".game");
-var $wordsList = $(".words-list");
+var $endGame = $(".end-game");
 var $board = $(".board");
 var $cells = $$(".board-cell");
+var $wordsList = $(".words-list");
 var $currentWord = $(".current-word");
 var $checkWord = $(".check-word");
-var $points = $(".points");
-var $endGame = $(".end-game");
-var $ranking = $(".ranking");
+var $score = $(".score");
+var $alert = $(".alert");
+var $timer = $(".timer");
+var $restart = $(".restart");
+
+var timer_options = [60, 120, 180];
 
 var currentWord = {};
-var points = 0;
+var score = 0;
 var guessedWords = [];
+var player;
 
 var words = ["hola", "ola", "algo", "prueba"];
 
-$ranking.showModal();
 function getRandomLetter(str) {
   return str.charAt(Math.floor(Math.random() * str.length));
 }
@@ -61,30 +65,78 @@ function initBoard() {
   }
 }
 
+function timer(time = 10) {
+  var intervalRef;
+  var remainingTime = time;
+
+  $timer.textContent = remainingTime;
+
+  if (!intervalRef) {
+    intervalRef = setInterval(function () {
+      $timer.textContent = remainingTime;
+
+      if (remainingTime <= 10) {
+        $timer.classList.add("ending");
+      }
+
+      if (remainingTime <= 0) {
+        $game.classList.remove("visible");
+        $endGame.classList.add("visible");
+        addToRanking({
+          name: player,
+          date: new Date(),
+          score,
+        });
+        return clearInterval(intervalRef);
+      }
+
+      remainingTime = remainingTime - 1;
+    }, 1000);
+  }
+}
+
 function newGame() {
   timer(timer_options[2]);
   initBoard();
 }
 
+function showAlert(message) {
+  if ($alert.classList.contains("visible")) {
+    $alert.classList.remove("visible");
+  }
+
+  $alert.textContent = message;
+  $alert.classList.add("visible");
+
+  setTimeout(function () {
+    $alert.classList.remove("visible");
+  }, 2000);
+}
+
 function handlePlayerSubmit(e) {
   e.preventDefault();
-  var input = e.target.elements[0];
-  var currentPlayer = input.value.trim();
+  var $input = e.target.elements[0];
+  var currentPlayer = $input.value.trim();
 
   if (currentPlayer.length < 3) {
     return showAlert("El nombre debe tener minimo 3 caracteres");
   }
 
+  player = currentPlayer;
+
   $intro.classList.add("hidden");
   $game.classList.add("visible");
-
+  $playerForm.reset();
   newGame();
 }
 
-function displayNewWord(word) {
+function displayNewWord(word, score) {
   var $word = document.createElement("li");
+  var $score = document.createElement("span");
   $word.textContent = word;
+  $score.textContent = score + "pts";
 
+  $word.append($score);
   $wordsList.append($word);
 }
 
@@ -184,10 +236,10 @@ function handleWordSubmit() {
   } else {
     checkWord(word).then(function (isValid) {
       if (isValid) {
-        displayNewWord(word);
+        displayNewWord(word, WORD_LENGTH_POINTS[word.length]);
         guessedWords.push(word);
-        points += WORD_LENGTH_POINTS[word.length];
-        $points.textContent = points;
+        score += WORD_LENGTH_POINTS[word.length];
+        $score.textContent = score;
       } else {
         showAlert("Palabra invalida");
       }
@@ -198,13 +250,6 @@ function handleWordSubmit() {
   currentWord = {};
   clearBoard();
 }
-
-$checkWord.addEventListener("click", handleWordSubmit);
-$playerForm.addEventListener("submit", handlePlayerSubmit);
-$cells.forEach(function ($cell) {
-  $cell.addEventListener("mouseover", handleMouseOver);
-  $cell.addEventListener("mouseout", handleMouseOut);
-});
 
 function getLastLetterPos() {
   // letterPositions = 'row-col'
@@ -243,6 +288,7 @@ function handleCellClick(e) {
 
     if (isValidPos === -1 && lastLetterPos !== selectedPos) {
       console.log("Invalid movement! 1");
+      return;
     }
   }
 
@@ -255,7 +301,6 @@ function handleCellClick(e) {
   } else {
     if (isValidPos === -1 && lastLetterPos !== selectedPos) {
       console.log("Invalid movement! 2");
-
       return;
     }
     currentWord[selectedPos] = selectedLetter;
@@ -263,10 +308,6 @@ function handleCellClick(e) {
     e.target.classList.toggle("selected");
   }
 }
-
-$cells.forEach(function ($cell) {
-  $cell.addEventListener("click", handleCellClick);
-});
 
 function getObjectValues(obj) {
   var values = [];
@@ -278,39 +319,21 @@ function getObjectValues(obj) {
   return values;
 }
 
-var $timer = $(".timer");
-var timer_options = [60, 120, 180];
-
-function timer(time = 10) {
-  var intervalRef;
-  var remainingTime = time;
-
-  if (!intervalRef) {
-    intervalRef = setInterval(function () {
-      $timer.textContent = remainingTime;
-
-      if (remainingTime <= 0) {
-        $game.classList.remove("visible");
-        $endGame.classList.add("visible");
-        return clearInterval(intervalRef);
-      }
-
-      remainingTime = remainingTime - 1;
-    }, 1000);
-  }
+function handleRestart() {
+  $endGame.classList.remove("visible");
+  $intro.classList.remove("hidden");
+  score = 0;
+  guessedWords = [];
 }
 
-$alert = $(".alert");
+$cells.forEach(function ($cell) {
+  $cell.addEventListener("click", handleCellClick);
+});
+$checkWord.addEventListener("click", handleWordSubmit);
+$playerForm.addEventListener("submit", handlePlayerSubmit);
+$cells.forEach(function ($cell) {
+  $cell.addEventListener("mouseover", handleMouseOver);
+  $cell.addEventListener("mouseout", handleMouseOut);
+});
 
-function showAlert(message) {
-  if ($alert.classList.contains("visible")) {
-    $alert.classList.remove("visible");
-  }
-
-  $alert.textContent = message;
-  $alert.classList.add("visible");
-
-  setTimeout(function () {
-    $alert.classList.remove("visible");
-  }, 2000);
-}
+$restart.addEventListener("click", handleRestart);
