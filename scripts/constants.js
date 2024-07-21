@@ -1,3 +1,5 @@
+"use strict";
+
 var WORD_LENGTH_POINTS = {
   3: 1,
   4: 1,
@@ -8,7 +10,7 @@ var WORD_LENGTH_POINTS = {
 };
 
 var ERROR_PUNISHMENTS = {
-  1: 1,
-  5: 2,
+  3: 1,
+  7: 2,
   10: 4,
 };

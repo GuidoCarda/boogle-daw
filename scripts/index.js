@@ -1,3 +1,5 @@
+"use strict";
+
 var $playerForm = $(".player-form");
 var $intro = $(".intro");
 var $game = $(".game");

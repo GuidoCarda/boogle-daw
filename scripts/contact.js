@@ -1,5 +1,7 @@
-$contactForm = $(".contact-form");
-$inputs = $$("input, textarea");
+"use strict";
+
+var $contactForm = $(".contact-form");
+var $inputs = $$("input, textarea");
 
 function validateEmail(value) {
   var emailPattern =
