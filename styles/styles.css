@@ -423,6 +423,7 @@ footer {
   max-height: 30rem;
   overflow-y: auto;
   scrollbar-gutter: stable;
+  font-size: 0.8rem;
 }
 
 .ranking .players li,
@@ -440,18 +441,16 @@ footer {
 
 .ranking .players li .name,
 .ranking .labels .name {
-  /* background: red; */
-  width: 60%;
+  width: 55%;
 }
+
 .ranking .players li .date,
 .ranking .labels .date {
-  width: 30%;
-  /* background: green; */
+  width: 35%;
   text-align: center;
 }
 .ranking .players li .score,
 .ranking .labels .score {
-  /* background: orange; */
   width: 10%;
   text-align: end;
 }
@@ -476,5 +475,20 @@ footer {
 
   .ranking .players {
     font-size: 0.7rem;
+  }
+
+  .ranking .players li .name,
+  .ranking .labels .name {
+    width: 40%;
+  }
+  .ranking .players li .date,
+  .ranking .labels .date {
+    width: 40%;
+    text-align: center;
+  }
+  .ranking .players li .score,
+  .ranking .labels .score {
+    width: 20%;
+    text-align: end;
   }
 }

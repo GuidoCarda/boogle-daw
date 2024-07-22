@@ -6,8 +6,21 @@ var $ranking = $(".ranking");
 var $closeRanking = $(".close", $ranking);
 var $openRanking = $(".ranking-btn");
 
-function formatDate(date) {
-  return date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
+function formatDateTime(date) {
+  var minutes =
+    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+
+  return (
+    date.getDate() +
+    "-" +
+    date.getMonth() +
+    "-" +
+    date.getFullYear() +
+    " " +
+    date.getHours() +
+    ":" +
+    minutes
+  );
 }
 
 function getRanking() {
@@ -42,7 +55,9 @@ function openRanking() {
 
       $li.innerHTML += "<span class='name'>" + player.name + "</span>";
       $li.innerHTML +=
-        "<span class='date'>" + formatDate(new Date(player.date)) + "</span>";
+        "<span class='date'>" +
+        formatDateTime(new Date(player.date)) +
+        "</span>";
       $li.innerHTML += "<span class='score'>" + player.score + "</span>";
 
       $players.append($li);
