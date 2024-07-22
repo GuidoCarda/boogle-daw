@@ -109,6 +109,7 @@ function handleSubmit(e) {
     "&body=" +
     encodeURIComponent(formValues.message + " ");
 
+  $contactForm.reset();
   window.location.href = mailtoLink;
 }
 
