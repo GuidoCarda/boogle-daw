@@ -258,12 +258,13 @@ function getErrorPenalty() {
 function increaseScore(points) {
   score += points;
   $score.textContent = score;
+  $score.classList.add("pulse", "increase");
 }
 
 function decreaseScore(penalty) {
   score -= penalty;
   $score.textContent = score;
-  $score.classList.add("shake");
+  $score.classList.add("shake", "decrease");
 }
 
 function handleWordSubmit() {
@@ -391,6 +392,7 @@ $cells.forEach(function ($cell) {
 });
 $checkWord.addEventListener("click", handleWordSubmit);
 $playerForm.addEventListener("submit", handlePlayerSubmit);
+
 $cells.forEach(function ($cell) {
   $cell.addEventListener("mouseover", handleMouseOver);
   $cell.addEventListener("mouseout", handleMouseOut);
@@ -398,5 +400,5 @@ $cells.forEach(function ($cell) {
 $restart.addEventListener("click", handleRestart);
 
 $score.addEventListener("animationend", function () {
-  $score.classList.remove("shake");
+  $score.classList.remove("shake", "pulse", "decrease", "increase");
 });
