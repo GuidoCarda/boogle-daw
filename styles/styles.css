@@ -116,19 +116,6 @@ main,
   animation: pulse 1s infinite;
 }
 
-@keyframes pulse {
-  0% {
-    scale: 1;
-  }
-  50% {
-    scale: 1.2;
-  }
-  100% {
-    transform: translateY(0px);
-    scale: 1;
-  }
-}
-
 .board {
   border: 4px solid black;
   width: max-content;
@@ -290,7 +277,7 @@ main,
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
-  width: min(24rem, 100%);
+  width: min(30rem, 100%);
 }
 
 .contact-form .input-group label {
@@ -305,7 +292,7 @@ main,
 }
 
 .contact-form :is(input, button) {
-  height: 2.5rem;
+  height: 3rem;
   font: inherit;
   outline: none;
   width: 100%;
@@ -456,6 +443,16 @@ footer {
 }
 
 @media screen and (max-width: 800px) {
+  .contact h1,
+  .intro h1 {
+    font-size: 1.5rem;
+  }
+
+  .contact p,
+  .intro p {
+    font-size: 0.8rem;
+  }
+
   .two-cols {
     flex-direction: column;
     justify-content: center;
@@ -490,5 +487,18 @@ footer {
   .ranking .labels .score {
     width: 20%;
     text-align: end;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.2;
+  }
+  100% {
+    transform: translateY(0px);
+    scale: 1;
   }
 }
