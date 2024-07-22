@@ -53,6 +53,28 @@ main,
   justify-content: center;
 }
 
+.end-game .title {
+  margin-bottom: 2rem;
+}
+
+.end-game .result {
+  font-size: 1.25rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.end-game .restart {
+  height: 3rem;
+  padding-inline: 1rem;
+  border: 3px solid black;
+  transition: all 200ms;
+}
+
+.end-game .restart:hover {
+  background: black;
+  color: white;
+}
+
 .game {
   display: none;
 }

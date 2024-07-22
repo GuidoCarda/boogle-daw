@@ -18,6 +18,7 @@ var timer_options = [60, 120, 180];
 
 var currentWord = {};
 var score = 0;
+var errors = 0;
 var guessedWords = [];
 var player;
 
@@ -65,11 +66,37 @@ function initBoard() {
   }
 }
 
+function endGame() {
+  var $result = $(".result", $endGame);
+  var result = "No completaste ninguna palabra";
+
+  if (guessedWords.length) {
+    result =
+      "Completaste " +
+      guessedWords.length +
+      " y sumaste un total de " +
+      score +
+      " puntos";
+  }
+
+  $result.textContent = result;
+
+  $game.classList.remove("visible");
+  $endGame.classList.add("visible");
+
+  addToRanking({
+    name: player,
+    date: new Date(),
+    score,
+  });
+}
+
 function timer(time = 10) {
   var intervalRef;
   var remainingTime = time;
 
   $timer.textContent = remainingTime;
+  $timer.classList.remove("ending");
 
   if (!intervalRef) {
     intervalRef = setInterval(function () {
@@ -80,13 +107,7 @@ function timer(time = 10) {
       }
 
       if (remainingTime <= 0) {
-        $game.classList.remove("visible");
-        $endGame.classList.add("visible");
-        addToRanking({
-          name: player,
-          date: new Date(),
-          score,
-        });
+        endGame();
         return clearInterval(intervalRef);
       }
 
@@ -96,7 +117,10 @@ function timer(time = 10) {
 }
 
 function newGame() {
-  timer(timer_options[2]);
+  $intro.classList.add("hidden");
+  $game.classList.add("visible");
+
+  timer(timer_options[0]);
   initBoard();
 }
 
@@ -123,9 +147,6 @@ function handlePlayerSubmit(e) {
   }
 
   player = currentPlayer;
-
-  $intro.classList.add("hidden");
-  $game.classList.add("visible");
   $playerForm.reset();
   newGame();
 }
@@ -322,8 +343,14 @@ function getObjectValues(obj) {
 function handleRestart() {
   $endGame.classList.remove("visible");
   $intro.classList.remove("hidden");
+  $currentWord.textContent = "";
+  $score.textContent = "0";
+  $wordsList.innerHTML = "";
+  currentWord = {};
   score = 0;
+  errors = 0;
   guessedWords = [];
+  clearBoard();
 }
 
 $cells.forEach(function ($cell) {
