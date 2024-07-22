@@ -22,8 +22,6 @@ var errors = 0;
 var guessedWords = [];
 var player;
 
-var words = ["hola", "ola", "algo", "prueba"];
-
 function getRandomLetter(str) {
   return str.charAt(Math.floor(Math.random() * str.length));
 }
@@ -151,22 +149,18 @@ function handlePlayerSubmit(e) {
   newGame();
 }
 
-function displayNewWord(word, score) {
+function displayNewWord(word, points) {
   var $word = document.createElement("li");
-  var $score = document.createElement("span");
+  var $points = document.createElement("span");
   $word.textContent = word;
-  $score.textContent = score + "pts";
+  $points.textContent = points + "pts";
 
-  $word.append($score);
+  $word.append($points);
   $wordsList.append($word);
 }
 
 function setValidCell($cell) {
-  $cell.classList.add("valid-cell");
-}
-
-function isValidWord(word) {
-  return word.length > 2;
+  $cell.classList.add("valid");
 }
 
 function handleMouseOver(e) {
@@ -247,24 +241,63 @@ function checkWord(word) {
     });
 }
 
+function getWordPoints(word) {
+  var length = word.length;
+
+  if (length > 8) {
+    return WORD_LENGTH_POINTS[8] + (length - 8);
+  }
+
+  return WORD_LENGTH_POINTS[length] || 0;
+}
+
+function getErrorPenalty() {
+  return ERROR_PUNISHMENTS[errors] || 0;
+}
+
+function increaseScore(points) {
+  score += points;
+  $score.textContent = score;
+}
+
+function decreaseScore(penalty) {
+  score -= penalty;
+  $score.textContent = score;
+  $score.classList.add("shake");
+}
+
 function handleWordSubmit() {
   var word = getObjectValues(currentWord).join("");
+  var penalty = getErrorPenalty();
+  var points;
 
-  if (!isValidWord(word)) {
+  if (word.length < 3) {
     showAlert("Debe contener al menos 3 letras");
+    errors++;
   } else if (guessedWords.includes(word)) {
     showAlert("Ya ingresaste " + word);
+    errors++;
   } else {
     checkWord(word).then(function (isValid) {
       if (isValid) {
-        displayNewWord(word, WORD_LENGTH_POINTS[word.length]);
+        points = getWordPoints(word);
         guessedWords.push(word);
-        score += WORD_LENGTH_POINTS[word.length];
-        $score.textContent = score;
+        displayNewWord(word, points);
+        increaseScore(points);
+        errors = 0;
       } else {
         showAlert("Palabra invalida");
+        errors++;
       }
     });
+  }
+
+  if (penalty) {
+    decreaseScore(penalty);
+  }
+
+  if (errors >= 10) {
+    errors = 0;
   }
 
   $currentWord.textContent = "";
@@ -362,5 +395,8 @@ $cells.forEach(function ($cell) {
   $cell.addEventListener("mouseover", handleMouseOver);
   $cell.addEventListener("mouseout", handleMouseOut);
 });
-
 $restart.addEventListener("click", handleRestart);
+
+$score.addEventListener("animationend", function () {
+  $score.classList.remove("shake");
+});

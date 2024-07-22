@@ -123,7 +123,7 @@ main,
   margin-bottom: 0.3rem;
 }
 
-/* board */
+/* game header */
 
 .game-header {
   display: flex;
@@ -132,11 +132,23 @@ main,
   margin-block: 3rem;
 }
 
-.timer.ending {
+.game-header .score {
+  display: inline-block;
+  color: black;
+}
+
+.game-header .score.shake {
+  color: red;
+  animation: shake 500ms ease-in;
+}
+
+.game-header .timer.ending {
   color: red;
   display: inline-block;
   animation: pulse 1s infinite;
 }
+
+/* board */
 
 .board {
   border: 4px solid black;
@@ -522,5 +534,28 @@ footer {
   100% {
     transform: translateY(0px);
     scale: 1;
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateY(-1px);
+  }
+
+  20%,
+  80% {
+    transform: translateY(2px);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translateY(-4px);
+  }
+
+  40%,
+  60% {
+    transform: translateY(4px);
   }
 }
