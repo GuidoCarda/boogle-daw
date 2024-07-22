@@ -14,8 +14,6 @@ var $alert = $(".alert");
 var $timer = $(".timer");
 var $restart = $(".restart");
 
-var timer_options = [60, 120, 180];
-
 var currentWord = {};
 var score = 0;
 var errors = 0;
@@ -89,7 +87,7 @@ function endGame() {
   });
 }
 
-function timer(time = 10) {
+function timer(time = 60) {
   var intervalRef;
   var remainingTime = time;
 
@@ -114,11 +112,11 @@ function timer(time = 10) {
   }
 }
 
-function newGame() {
+function newGame(timeLimit) {
   $intro.classList.add("hidden");
   $game.classList.add("visible");
 
-  timer(timer_options[0]);
+  timer(timeLimit);
   initBoard();
 }
 
@@ -138,6 +136,7 @@ function showAlert(message) {
 function handlePlayerSubmit(e) {
   e.preventDefault();
   var $input = e.target.elements[0];
+  var timeLimit = e.target.elements["time-limit"].value;
   var currentPlayer = $input.value.trim();
 
   if (currentPlayer.length < 3) {
@@ -146,7 +145,7 @@ function handlePlayerSubmit(e) {
 
   player = currentPlayer;
   $playerForm.reset();
-  newGame();
+  newGame(timeLimit);
 }
 
 function displayNewWord(word, points) {
