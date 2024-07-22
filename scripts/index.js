@@ -171,14 +171,36 @@ function handleMouseOver(e) {
   var cellIndex = Array.prototype.indexOf.call(row.children, cell);
   var rowIndex = Array.prototype.indexOf.call(board.children, row);
 
-  var validMoves = getValidMoves(rowIndex, cellIndex);
-  validMoves.forEach(setValidCell);
+  var validMoves;
+
+  if (Object.keys(currentWord).length > 0) {
+    var lastLetterPos = getLastLetterPos();
+
+    validMoves = getValidMoves(
+      Number(lastLetterPos[0]),
+      Number(lastLetterPos[2])
+    );
+
+    var isValidPos = Array.prototype.indexOf.call(validMoves, cell);
+
+    if (isValidPos === -1) {
+      cell.classList.add("invalid");
+      console.log("Invalid movement! 1");
+      return;
+    } else {
+      validMoves = getValidMoves(rowIndex, cellIndex);
+      validMoves.forEach(setValidCell);
+    }
+  } else {
+    validMoves = getValidMoves(rowIndex, cellIndex);
+    validMoves.forEach(setValidCell);
+  }
 }
 
 function handleMouseOut() {
-  var hoveredCells = document.querySelectorAll(".board-cell.valid-cell");
+  var hoveredCells = $$(".board-cell.valid, .board-cell.invalid");
   for (var i = 0; i < hoveredCells.length; i++) {
-    hoveredCells[i].classList.remove("valid-cell");
+    hoveredCells[i].classList.remove("valid", "invalid");
   }
 }
 
