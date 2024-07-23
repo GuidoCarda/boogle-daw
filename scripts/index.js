@@ -11,7 +11,6 @@ var $currentWord = $(".current-word");
 var $checkWord = $(".check-word");
 var $score = $(".score");
 var $alert = $(".alert");
-var $timer = $(".timer");
 var $restart = $(".restart");
 
 var currentWord = {};
@@ -88,28 +87,31 @@ function endGame() {
 }
 
 function timer(time = 60) {
+  var $timer = $(".timer");
   var intervalRef;
   var remainingTime = time;
 
   $timer.textContent = remainingTime;
   $timer.classList.remove("ending");
 
-  if (!intervalRef) {
-    intervalRef = setInterval(function () {
-      $timer.textContent = remainingTime;
+  clearInterval(intervalRef);
 
-      if (remainingTime <= 10) {
-        $timer.classList.add("ending");
-      }
+  function updateTimer() {
+    remainingTime -= 1;
 
-      if (remainingTime <= 0) {
-        endGame();
-        return clearInterval(intervalRef);
-      }
+    $timer.textContent = remainingTime;
 
-      remainingTime = remainingTime - 1;
-    }, 1000);
+    if (remainingTime <= 10) {
+      $timer.classList.add("ending");
+    }
+
+    if (remainingTime <= 0) {
+      clearInterval(intervalRef);
+      endGame();
+    }
   }
+
+  intervalRef = setInterval(updateTimer, 1000);
 }
 
 function newGame(timeLimit) {
