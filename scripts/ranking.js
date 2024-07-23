@@ -3,6 +3,7 @@
 var RANKING_KEY = "ranking";
 
 var $ranking = $(".ranking");
+var $rankingOrder = $(".ranking-order");
 var $closeRanking = $(".close", $ranking);
 var $openRanking = $(".ranking-btn");
 
@@ -23,6 +24,14 @@ function formatDateTime(date) {
   );
 }
 
+function orderByScore(entryA, entryB) {
+  return entryB.score - entryA.score;
+}
+
+function orderByDate(entryA, entryB) {
+  return new Date(entryB.date) - new Date(entryA.date);
+}
+
 function getRanking() {
   return JSON.parse(window.localStorage.getItem(RANKING_KEY)) || [];
 }
@@ -30,21 +39,19 @@ function getRanking() {
 function addToRanking(entry) {
   var ranking = getRanking();
   ranking.push(entry);
-
-  ranking.sort(function (entryA, entryB) {
-    return entryB.score - entryA.score;
-  });
-
+  ranking.sort(orderByScore);
   window.localStorage.setItem(RANKING_KEY, JSON.stringify(ranking));
 }
 
 function openRanking() {
-  var $players = $(".players", $ranking);
   var ranking = getRanking();
+  ranking.sort(orderByScore);
+  displayRanking(ranking);
+  $ranking.showModal();
+}
 
-  ranking.sort(function (entryA, entryB) {
-    return entryB.score - entryA.score;
-  });
+function displayRanking(ranking) {
+  var $players = $(".players", $ranking);
 
   $players.innerHTML = "";
 
@@ -67,13 +74,20 @@ function openRanking() {
     $li.textContent = "Aun no hay registros";
     $players.append($li);
   }
-
-  $ranking.showModal();
 }
 
 function closeRanking() {
   $ranking.close();
+  $rankingOrder.value = "score";
+}
+
+function handleRankingOrder(e) {
+  var criteria = e.target.value;
+  var ranking = getRanking();
+  ranking.sort(criteria === "score" ? orderByScore : orderByDate);
+  displayRanking(ranking);
 }
 
 $openRanking.addEventListener("click", openRanking);
 $closeRanking.addEventListener("click", closeRanking);
+$rankingOrder.addEventListener("change", handleRankingOrder);
