@@ -32,6 +32,10 @@ button {
   font: inherit;
 }
 
+button:active {
+  scale: 0.995;
+}
+
 ul {
   list-style: none;
 }
