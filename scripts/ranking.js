@@ -71,7 +71,11 @@ function displayRanking(ranking) {
     }
   } else {
     var $li = document.createElement("li");
+    var $img = document.createElement("img");
+    $li.classList.add("empty");
     $li.textContent = "Aun no hay registros";
+    $img.src = "assets/empty.svg";
+    $li.append($img);
     $players.append($li);
   }
 }
