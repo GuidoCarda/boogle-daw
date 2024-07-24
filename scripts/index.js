@@ -57,6 +57,7 @@ function initBoard() {
     var $cells = $row.children;
     for (var j = 0; j < $cells.length; j++) {
       $cells[j].textContent = board[i][j];
+      $cells[j].dataset.pos = i + "-" + j;
     }
   }
 }
@@ -165,44 +166,27 @@ function setValidCell($cell) {
 }
 
 function handleMouseOver(e) {
-  var cell = e.target;
-  var row = cell.parentElement;
-  var board = row.parentElement;
+  var $cell = e.target;
+  var $validMoves;
+  var cellPos = $cell.dataset.pos;
+  var rowIndex = Number(cellPos[0]);
+  var cellIndex = Number(cellPos[2]);
 
-  var cellIndex = Array.prototype.indexOf.call(row.children, cell);
-  var rowIndex = Array.prototype.indexOf.call(board.children, row);
+  if (!Object.keys(currentWord).length) {
+    $validMoves = getValidMoves(rowIndex, cellIndex);
+    $validMoves.forEach(setValidCell);
+  }
+}
 
-  var validMoves;
-
-  if (Object.keys(currentWord).length > 0) {
-    var lastLetterPos = getLastLetterPos();
-
-    validMoves = getValidMoves(
-      Number(lastLetterPos[0]),
-      Number(lastLetterPos[2])
-    );
-
-    var isValidPos = Array.prototype.indexOf.call(validMoves, cell);
-
-    if (isValidPos === -1) {
-      cell.classList.add("invalid");
-      console.log("Invalid movement! 1");
-      return;
-    } else {
-      validMoves = getValidMoves(rowIndex, cellIndex);
-      validMoves.forEach(setValidCell);
-    }
-  } else {
-    validMoves = getValidMoves(rowIndex, cellIndex);
-    validMoves.forEach(setValidCell);
+function clearCellsState() {
+  for (var i = 0; i < $cells.length; i++) {
+    $cells[i].classList.remove("valid", "invalid");
   }
 }
 
 function handleMouseOut() {
-  var hoveredCells = $$(".board-cell.valid, .board-cell.invalid");
-  for (var i = 0; i < hoveredCells.length; i++) {
-    hoveredCells[i].classList.remove("valid", "invalid");
-  }
+  if (Object.keys(currentWord).length) return;
+  clearCellsState();
 }
 
 function getValidMoves(rowIndex, cellIndex) {
@@ -241,7 +225,7 @@ function getValidMoves(rowIndex, cellIndex) {
 
 function clearBoard() {
   $cells.forEach(function ($cell) {
-    $cell.classList.remove("selected");
+    $cell.classList.remove("selected", "valid", "last");
   });
 }
 
@@ -320,10 +304,6 @@ function handleWordSubmit() {
     decreaseScore(penalty);
   }
 
-  if (errors >= 10) {
-    errors = 0;
-  }
-
   $currentWord.textContent = "";
   currentWord = {};
   clearBoard();
@@ -340,51 +320,65 @@ function getLastLetterPos() {
   return lastLetterPos;
 }
 
-function handleCellClick(e) {
-  var cell = e.target;
-  var row = cell.parentElement;
-  var board = row.parentElement;
+function deselectCell($cell, selectedPos) {
+  delete currentWord[selectedPos];
+  $cell.classList.remove("selected", "last");
+  $currentWord.innerText = getObjectValues(currentWord).join("");
+}
 
-  var cellIndex = Array.prototype.indexOf.call(row.children, cell);
-  var rowIndex = Array.prototype.indexOf.call(board.children, row);
-
-  var selectedPos = rowIndex + "-" + cellIndex;
-  var selectedLetter = e.target.textContent;
-
-  var lastLetterPos;
-  var isValidPos;
-
-  if ($currentWord.textContent.length > 0) {
-    lastLetterPos = getLastLetterPos();
-
-    var validMoves = getValidMoves(
+function updateValidMoves(lastLetterPos) {
+  if (lastLetterPos) {
+    var newValidMoves = getValidMoves(
       Number(lastLetterPos[0]),
       Number(lastLetterPos[2])
     );
 
-    isValidPos = Array.prototype.indexOf.call(validMoves, cell);
-
-    if (isValidPos === -1 && lastLetterPos !== selectedPos) {
-      console.log("Invalid movement! 1");
-      return;
-    }
-  }
-
-  if (e.target.classList.contains("selected")) {
-    if (lastLetterPos === selectedPos) {
-      delete currentWord[selectedPos];
-      e.target.classList.toggle("selected");
-    }
-    $currentWord.textContent = getObjectValues(currentWord).join("");
+    clearCellsState();
+    newValidMoves.forEach(setValidCell);
   } else {
-    if (isValidPos === -1 && lastLetterPos !== selectedPos) {
-      console.log("Invalid movement! 2");
+    clearCellsState();
+  }
+}
+
+function toggleLastCell(pos) {
+  var $cell = $('[data-pos="' + pos + '"]', $board);
+  $cell.classList.toggle("last");
+}
+
+function handleCellClick(e) {
+  var $cell = e.target;
+  var selectedPos = $cell.dataset.pos; // -> 'row-col'
+  var selectedLetter = $cell.textContent;
+  var lastLetterPos = getLastLetterPos();
+
+  if (Object.keys(currentWord).length) {
+    var $previousValidMoves = getValidMoves(
+      Number(lastLetterPos[0]),
+      Number(lastLetterPos[2])
+    );
+
+    if (selectedPos === lastLetterPos) {
+      deselectCell($cell, selectedPos);
+      lastLetterPos = getLastLetterPos();
+      updateValidMoves(lastLetterPos);
+      if (!Object.keys(currentWord).length) return;
+      toggleLastCell(lastLetterPos);
       return;
     }
-    currentWord[selectedPos] = selectedLetter;
-    $currentWord.textContent += selectedLetter;
-    e.target.classList.toggle("selected");
+
+    if (Array.prototype.indexOf.call($previousValidMoves, $cell) === -1) return;
   }
+
+  if (lastLetterPos) {
+    toggleLastCell(lastLetterPos);
+  }
+
+  updateValidMoves(selectedPos);
+
+  currentWord[selectedPos] = selectedLetter;
+  $currentWord.textContent += selectedLetter;
+  $cell.classList.add("selected", "last");
+  $cell.classList.remove("valid");
 }
 
 function getObjectValues(obj) {
@@ -415,13 +409,11 @@ $cells.forEach(function ($cell) {
 });
 $checkWord.addEventListener("click", handleWordSubmit);
 $playerForm.addEventListener("submit", handlePlayerSubmit);
-
 $cells.forEach(function ($cell) {
   $cell.addEventListener("mouseover", handleMouseOver);
   $cell.addEventListener("mouseout", handleMouseOut);
 });
 $restart.addEventListener("click", handleRestart);
-
 $score.addEventListener("animationend", function () {
   $score.classList.remove("shake", "pulse", "decrease", "increase");
 });

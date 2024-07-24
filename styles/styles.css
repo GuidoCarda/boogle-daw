@@ -193,6 +193,10 @@ main,
   font-weight: bold;
 }
 
+.board-cell.selected.last {
+  border-color: rgb(134, 224, 138);
+}
+
 .board-cell.valid {
   background: rgb(185, 235, 191);
   font-weight: bold;
