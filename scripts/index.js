@@ -175,18 +175,29 @@ function handleMouseOver(e) {
   if (!Object.keys(currentWord).length) {
     $validMoves = getValidMoves(rowIndex, cellIndex);
     $validMoves.forEach(setValidCell);
+  } else {
+    if (
+      !$cell.classList.contains("valid") &&
+      !$cell.classList.contains("selected")
+    ) {
+      $cell.classList.add("invalid");
+    }
   }
 }
 
 function clearCellsState() {
-  for (var i = 0; i < $cells.length; i++) {
-    $cells[i].classList.remove("valid", "invalid");
-  }
+  $cells.forEach(function ($cell) {
+    $cell.classList.remove("valid", "invalid");
+  });
 }
 
-function handleMouseOut() {
-  if (Object.keys(currentWord).length) return;
-  clearCellsState();
+function handleMouseOut(e) {
+  var $cell = e.target;
+  if (Object.keys(currentWord).length) {
+    $cell.classList.remove("invalid");
+  } else {
+    clearCellsState();
+  }
 }
 
 function getValidMoves(rowIndex, cellIndex) {

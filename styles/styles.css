@@ -212,12 +212,12 @@ main,
   font-weight: bold;
 }
 
-.board-cell:hover:not(.selected) {
+.board-cell:hover:not(.selected, .invalid) {
   font-size: 2.5rem;
   background: rgb(123, 211, 123);
 }
 
-.board-cell.invalid:hover:not(.selected) {
+.board-cell.invalid {
   font-size: 2.5rem;
   background: rgb(206, 111, 111);
 }
