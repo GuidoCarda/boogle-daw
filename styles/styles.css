@@ -287,20 +287,22 @@ main,
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 4rem;
-  width: max-content;
-  padding-inline: 2rem;
+  width: min(40rem, 90%);
+  padding: 1rem 2rem;
   margin-inline: auto;
   visibility: hidden;
   background: rgb(255, 255, 255);
   border: 3px solid rgb(0, 0, 0);
   opacity: 0;
+  text-align: center;
+  line-height: 1.5;
   transition: all 200ms;
 }
 
 .alert.visible {
   opacity: 100;
   visibility: visible;
+  width: min(40rem, 90%);
 }
 
 .end-game {
@@ -658,6 +660,11 @@ footer a:hover ~ img {
 
   .check-word {
     width: 100%;
+  }
+
+  .words-list li {
+    width: 100%;
+    padding: 1rem;
   }
 
   .end-game .title {
