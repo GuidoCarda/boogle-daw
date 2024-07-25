@@ -70,7 +70,7 @@ function endGame() {
     result =
       "Completaste " +
       guessedWords.length +
-      " y sumaste un total de " +
+      "palabras y sumaste un total de " +
       score +
       " puntos";
   }
