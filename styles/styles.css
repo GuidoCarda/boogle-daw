@@ -8,7 +8,7 @@ main,
 .end-game,
 .contact {
   position: relative;
-  min-height: calc(100vh - 8rem);
+  min-height: calc(100dvh - 8rem);
 }
 
 .container {
@@ -107,24 +107,6 @@ main,
   filter: contrast(2);
   z-index: -1;
   animation: slide-up 500ms ease-out;
-}
-
-@keyframes slide-up {
-  0% {
-    opacity: 0.2;
-    transform: translateY(10rem) rotate(18deg);
-    scale: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) rotate(0deg);
-
-    rotate: 0;
-    scale: 1;
-  }
 }
 
 .end-game .title {
@@ -692,6 +674,16 @@ footer a:hover ~ img {
     width: 100%;
   }
 
+  .end-game .title {
+    text-align: center;
+    line-height: 1.7;
+    font-size: 1.25rem;
+  }
+
+  .end-game .result {
+    font-size: 0.8rem;
+  }
+
   .ranking .players {
     font-size: 0.7rem;
   }
@@ -755,5 +747,23 @@ footer a:hover ~ img {
   40%,
   60% {
     transform: translateY(4px);
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    opacity: 0.2;
+    transform: translateY(10rem) rotate(18deg);
+    scale: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+
+    rotate: 0;
+    scale: 1;
   }
 }
