@@ -1,5 +1,11 @@
 "use strict";
 
+/*
+Code style considerations:
+  - Every variable starting with $ holds a DOM node or a list of nodes
+*/
+
+// DOM elements
 var $playerForm = $(".player-form");
 var $intro = $(".intro");
 var $game = $(".game");
@@ -13,6 +19,7 @@ var $score = $(".score");
 var $alert = $(".alert");
 var $restart = $(".restart");
 
+//Game data
 var currentWord = {};
 var score = 0;
 var errors = 0;
@@ -70,7 +77,7 @@ function endGame() {
     result =
       "Completaste " +
       guessedWords.length +
-      "palabras y sumaste un total de " +
+      " palabras y sumaste un total de " +
       score +
       " puntos";
   }
@@ -165,6 +172,40 @@ function setValidCell($cell) {
   $cell.classList.add("valid");
 }
 
+function getValidMoves(rowIndex, cellIndex) {
+  // [row, col]
+  var directions = [
+    [-1, -1], // Top-left
+    [-1, 0], // Top
+    [-1, 1], // Top-right
+    [0, -1], // Left
+    [0, 1], // Right
+    [1, -1], // Bottom-left
+    [1, 0], // Bottom
+    [1, 1], // Bottom-right
+  ];
+
+  var $validCells = [];
+  var $rows = $$(".board-row");
+
+  for (var i = 0; i < directions.length; i++) {
+    var newRow = rowIndex + directions[i][0];
+    var newCell = cellIndex + directions[i][1];
+
+    if (newRow >= 0 && newRow < 4 && newCell >= 0 && newCell < 4) {
+      var $cell = $rows[newRow].children[newCell];
+
+      if ($cell.classList.contains("selected")) {
+        continue;
+      }
+
+      $validCells.push($rows[newRow].children[newCell]);
+    }
+  }
+
+  return $validCells;
+}
+
 function handleMouseOver(e) {
   var $cell = e.target;
   var $validMoves;
@@ -198,40 +239,6 @@ function handleMouseOut(e) {
   } else {
     clearCellsState();
   }
-}
-
-function getValidMoves(rowIndex, cellIndex) {
-  // [row, col]
-  var directions = [
-    [-1, -1], // Top-left
-    [-1, 0], // Top
-    [-1, 1], // Top-right
-    [0, -1], // Left
-    [0, 1], // Right
-    [1, -1], // Bottom-left
-    [1, 0], // Bottom
-    [1, 1], // Bottom-right
-  ];
-
-  var validCells = [];
-  var $rows = $$(".board-row");
-
-  for (var i = 0; i < directions.length; i++) {
-    var newRow = rowIndex + directions[i][0];
-    var newCell = cellIndex + directions[i][1];
-
-    if (newRow >= 0 && newRow < 4 && newCell >= 0 && newCell < 4) {
-      var $cell = $rows[newRow].children[newCell];
-
-      if ($cell.classList.contains("selected")) {
-        continue;
-      }
-
-      validCells.push($rows[newRow].children[newCell]);
-    }
-  }
-
-  return validCells;
 }
 
 function clearBoard() {
@@ -285,6 +292,16 @@ function decreaseScore(penalty) {
   $score.classList.add("shake", "decrease");
 }
 
+function getObjectValues(obj) {
+  var values = [];
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      values.push(obj[key]);
+    }
+  }
+  return values;
+}
+
 function handleWordSubmit() {
   var word = getObjectValues(currentWord).join("");
   var penalty = getErrorPenalty();
@@ -303,7 +320,7 @@ function handleWordSubmit() {
         guessedWords.push(word);
         displayNewWord(word, points);
         increaseScore(points);
-        errors = 0;
+        errors = 0; // Restart error count on word guess
       } else {
         showAlert("Palabra invalida");
         errors++;
@@ -321,8 +338,7 @@ function handleWordSubmit() {
 }
 
 function getLastLetterPos() {
-  // letterPositions = 'row-col'
-  var lastLetterPos;
+  var lastLetterPos; // -> 'row-col'
   for (var letterPos in currentWord) {
     if (currentWord.hasOwnProperty(letterPos)) {
       lastLetterPos = letterPos;
@@ -372,8 +388,9 @@ function handleCellClick(e) {
       deselectCell($cell, selectedPos);
       lastLetterPos = getLastLetterPos();
       updateValidMoves(lastLetterPos);
-      if (!Object.keys(currentWord).length) return;
-      toggleLastCell(lastLetterPos);
+      if (lastLetterPos) {
+        toggleLastCell(lastLetterPos);
+      }
       return;
     }
 
@@ -390,16 +407,6 @@ function handleCellClick(e) {
   $currentWord.textContent += selectedLetter;
   $cell.classList.add("selected", "last");
   $cell.classList.remove("valid");
-}
-
-function getObjectValues(obj) {
-  var values = [];
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      values.push(obj[key]);
-    }
-  }
-  return values;
 }
 
 function handleRestart() {
